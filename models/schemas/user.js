@@ -1,0 +1,28 @@
+const { Schema } = require('mongoose');
+const productSchema = require('./product');
+const shortId = require('./types/shortId');
+
+const UserSchema = new Schema({
+  shortId,
+  email: {
+    type: String,
+    required:true,
+  },
+  name: {
+    type: String,
+    required: true,
+  },
+  password:{
+    type:String,
+    required:true
+  },
+  isAdmin:{
+    type:Boolean,
+    required:false,
+    default:false,
+  }
+},{
+  timestamps: true,
+});
+
+module.exports = UserSchema;
