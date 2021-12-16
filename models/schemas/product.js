@@ -3,11 +3,11 @@ const shortId = require('./types/shortId');
 
 const productSchema = new Schema({
   shortId,
-  modelName: {
+  modelName: { // 제품이름
     type:String,
     required:true
   },
-  modelNumber: { // 상품 넘버
+  modelNumber: { //제품넘버
     type:String,
     required:true
   },
@@ -15,24 +15,48 @@ const productSchema = new Schema({
     type: String,
     default:'jordan',
   },
-  color: {
+  color: { //발매색상
     type:String
   },
-  price: {
+  price: { //발매가격
     type:Number,
     required:true
   },
-  releaseDate:{
+  releaseDate:{ // 발매날짜
     type:Date,
   },
-  likeCount: {
+  likeCount: { //좋아요갯수
     type:Number,
-    default: 0
+    default: 0,
+    min:0
   },
-  imageUrl: { 
+  imageUrl: { //상품이미지
     type:String,
     required:true
-  }
+  },
+  reviews:{ // 리뷰정보
+    size:{
+      0:{type:Number,default:0,min:0},
+      1:{type:Number,default:0,min:0},
+      2:{type:Number,default:0,min:0}
+    }, //착화감
+    comfort:{
+      0:{type:Number,default:0,min:0},
+      1:{type:Number,default:0,min:0},
+      2:{type:Number,default:0,min:0}
+    }, 
+    color: {
+      0:{type:Number,default:0,min:0},
+      1:{type:Number,default:0,min:0},
+      2:{type:Number,default:0,min:0}
+    }
+   }
 });
 
 module.exports = productSchema
+
+// reviews:{ // 리뷰정보
+//   size:{type:[Number] , default:[0,0,0]}, //착화감
+//   comfort:{type:[Number], default:[0,0,0]}, 
+//   color: {type:[Number],default:[0,0,0]}
+//  }

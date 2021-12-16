@@ -14,6 +14,7 @@ const mongoose = require('mongoose');
 //router
 const indexRouter = require('./routes/index');
 const authRouter = require('./routes/auth');
+const testRouter= require('./routes/test');
 const app = express();
 
 // DB connection
@@ -22,8 +23,8 @@ mongoose.connection.on('connect', ()=>{
   console.log('mongoDB connected');
 });
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'pug');
+// app.set('views', path.join(__dirname, 'views'));
+// app.set('view engine', 'pug');
 
 app.use(cors());
 app.use(logger('dev'));
@@ -44,6 +45,7 @@ app.use(passport.session());
 
 app.use('/', indexRouter);
 app.use('/auth',authRouter);
+app.use('/test',testRouter);
 // app.use('/users', usersRouter);
 // app.use('/posts',postsRouter);
 
@@ -60,9 +62,8 @@ app.use(function(err, req, res, next) {
   res.locals.message = err.message; 
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-  // render the error page
-  res.status(err.status || 500);
-  res.json(err.message);
+  res.status(err.status || 500); 
+  res.json(err);
 });
 
 module.exports = app;
