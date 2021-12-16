@@ -8,12 +8,12 @@ const transport = nodemailer.createTransport({
  },
 });
 
-module.exports = (to, subject, text) => new Promise((resolve, reject) => {
+module.exports = (to, subject, content) => new Promise((resolve, reject) => {
   const message = {
     from: 'sae1013@gmail.com',
-    to:'sae1013@gmail.com',
+    to,
     subject,
-    text,
+    content,
   };
   
   transport.sendMail(message, (err, info) => {
