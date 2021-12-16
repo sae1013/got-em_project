@@ -39,16 +39,16 @@ router.get('/logout',(req,res)=>{
   res.status(200).send({message:'로그아웃 되었습니다'});
 });
 
-//비밀번호 찾기
+//비밀번호 찾기 라우터
 router.post('/reset-password', asyncHandler(async (req, res) => {
-  const { email } = req.body; // form으로 이메일을 입력받아야함
+  const { email } = req.body; 
   const existedUser = await User.findOne({email});
   if(!existedUser){
     const error = new Error('가입되지않은 계정입니다');
     error.status = 401;
     return error
   }
-  //유저의 비번 업데이트
+  //메일을 먼저 보내고, 비밀번호 변경하기
   const newPassword = generatePassword();
   try{
     await sendMail(email, "TEAM7: 새로운 패스워드 입니다.",`요청하신 새로운 패스워드 입니다: ${newPassword}`);//to ,subject,text
@@ -62,8 +62,25 @@ router.post('/reset-password', asyncHandler(async (req, res) => {
   
 }));
 
+//계정찾기 라우터
 router.post('/find-email', asyncHandler(async(req,res)=>{
+  const {phoneNumber} = req.body;
+  const existingUser = await User.findOne({phoneNumber});
   
+  if(!existingUser){
+    const error = new Error('가입되지 않은 번호입니다.');
+    error.status = 401
+    return error
+  } 
+  try{
+    const email = existingUser.email;
+    await sendMail(email, "TEAM7: 요청하신 아이디 입니다.",`요청하신 아이디 입니다: ${email}`);
+    res.json({'success':"메일이 발송되었습니다."});
+  }catch(err){
+    const error = new Error('Server too busy')
+    error.status = 421
+    throw error
+  }
 }))
 
 module.exports = router;
