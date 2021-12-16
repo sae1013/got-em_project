@@ -36,9 +36,9 @@ const productSchema = new Schema({
   },
   reviews:{ // 리뷰정보
     size:{
-      0:{type:Number,default:0,min:0},
-      1:{type:Number,default:0,min:0},
-      2:{type:Number,default:0,min:0}
+      'small':{type:Number,default:0,min:0},
+      'just':{type:Number,default:0,min:0},
+      'big':{type:Number,default:0,min:0}
     }, //착화감
     comfort:{
       0:{type:Number,default:0,min:0},
@@ -54,9 +54,3 @@ const productSchema = new Schema({
 });
 
 module.exports = productSchema
-
-// reviews:{ // 리뷰정보
-//   size:{type:[Number] , default:[0,0,0]}, //착화감
-//   comfort:{type:[Number], default:[0,0,0]}, 
-//   color: {type:[Number],default:[0,0,0]}
-//  }

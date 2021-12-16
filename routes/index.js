@@ -1,21 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const asyncHandler = require('../utils/async-handler');
-const { User } = require('../models/index');
 const hashPassword = require('../utils/hash-password');
-/* GET home page. */
-router.get('/', function (req, res, next) {
-  res.render('index', { title: 'Express' });
-});
+const logout = require('express-passport-logout');
 
-router.get('/test', async (req, res) => {
-  const newUser = await User.create({
-    email: 'jmw123123',
-    name: 'asdfasf',
-    password: '1234',
-  });
-  
-});
+const { User } = require('../models/index');
 
 router.post('/signup',asyncHandler(async (req, res) => {
     const { email, name, isAdmin, password } = req.body;
@@ -24,9 +13,10 @@ router.post('/signup',asyncHandler(async (req, res) => {
     const signedUpEmail = await User.findOne({
       email: email,
     });
+
     if (signedUpEmail) {
       const err = new Error('중복된 사용자 입니다');
-      err.status(409);
+      err.status = 401
       throw err;
       
     }
@@ -42,13 +32,9 @@ router.post('/signup',asyncHandler(async (req, res) => {
   }),
 );
 
-router.post(
-  '/logout',
-  asyncHandler(async (req, res) => {
-    req.logout();
-    await req.session.destroy(); // 세션강제삭제
-    res.clearCookie('connect.sid'); //응답쿠키의 세션아이디 강제삭제
-    res.status(200).send({ message: '로그아웃 되었습니다' });
-  }),
-);
+router.get('/logout',(req,res)=>{
+  res.clearCookie('token');
+  res.status(200).send({message:'로그아웃 되었습니다'});
+})
+
 module.exports = router;
