@@ -46,7 +46,7 @@ router.post('/reset-password', asyncHandler(async (req, res) => {
   if(!existedUser){
     const error = new Error('가입되지않은 계정입니다');
     error.status = 401;
-    return error
+    throw error
   }
   //메일을 먼저 보내고, 비밀번호 변경하기
   const newPassword = generatePassword();
@@ -70,7 +70,7 @@ router.post('/find-email', asyncHandler(async(req,res)=>{
   if(!existingUser){
     const error = new Error('가입되지 않은 번호입니다.');
     error.status = 401
-    return error
+    throw error
   } 
   try{
     const email = existingUser.email;
