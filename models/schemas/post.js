@@ -8,22 +8,22 @@ const PostSchema = new Schema(
     productId:{ // 어떤제품에대한 후기인지
       type:Schema.Types.ObjectId,
       ref:'Product',
-      // required:true,
+      required:true,
       index:true,
     },
     author: {
       type: Schema.Types.ObjectId,
       ref: 'User',
-      // required: true,
+      required: true,
       index: true,
     },
     title: {
       type: String,
-      default: 'asdf',
+      required:true
     },
     content: {
       type: String,
-      default: 'asdfasdf',
+      required:true
     },
     comments: [CommentSchema],
     commentCount: {

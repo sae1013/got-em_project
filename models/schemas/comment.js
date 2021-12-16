@@ -12,12 +12,12 @@ const CommentSchema = new Schema(
     },
     content: {
       type: String,
-      default: 'asdfasdf',
+      required:true
     },
   },
   {
     timestamps: true,
-  },
+  }
 );
 
 module.exports = CommentSchema;

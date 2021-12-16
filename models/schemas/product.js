@@ -5,9 +5,13 @@ const productSchema = new Schema({
   shortId,
   modelName: {
     type:String,
-    // required:true
+    required:true
   },
-  series: {
+  modelNumber: { // 상품 넘버
+    type:String,
+    required:true
+  },
+  series: { // 조던,에어포스,덩크
     type: String,
     default:'jordan',
   },
@@ -16,19 +20,18 @@ const productSchema = new Schema({
   },
   price: {
     type:Number,
-    // required:true
+    required:true
   },
   releaseDate:{
-    type:String,
-    // required:true
+    type:Date,
   },
-  
   likeCount: {
     type:Number,
     default: 0
   },
-  image: { // 이미지 주소만 받음
+  imageUrl: { 
     type:String,
+    required:true
   }
 });
 
