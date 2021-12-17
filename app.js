@@ -18,8 +18,9 @@ const loginRequired = require('./middlewares/login-required');
 //router
 const indexRouter = require('./routes/index');
 const authRouter = require('./routes/auth');
+const postRouter = require('./routes/posts');
 const testRouter= require('./routes/test');
-const uploadImageRouter = require('./routes/uploadImage');
+// const uploadImageRouter = require('./routes/uploadImage');
 
 //express-app
 const app = express();
@@ -34,7 +35,7 @@ app.use(cors());
 app.use(expressFileUpload());
 app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: true })); // 바디파서
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -45,7 +46,8 @@ app.use(getUserFromJWT);
 app.use('/', indexRouter);
 app.use('/test',testRouter);
 app.use('/auth',authRouter);
-app.use('/upload-image',uploadImageRouter)
+// app.use('/upload-image',uploadImageRouter);
+app.use('/posts',postRouter);
 // app.use('/users', usersRouter);
 // app.use('/posts',postsRouter);
 
