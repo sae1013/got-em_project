@@ -54,7 +54,7 @@
   - 와이어프레임 <br>
   https://www.figma.com/file/pgUaFcvrEzHnBOD7idcM2e/TEAM-7?node-id=0%3A1
 
-  - DB Schema <br>
+  - DB Schema <br> -> 수정 예정입니다. 빠진부분이 있습니다.
   https://whimsical.com/schemas-9vDLdbNkui2JnGx3LFQ4Bg
 
 ## 5. 프로젝트 팀원 역할 분담
