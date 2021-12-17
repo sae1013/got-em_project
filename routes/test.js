@@ -1,4 +1,4 @@
-//테스트용 라우터
+//테스트용 라우터 이라우터는 완전 연습용입니다.
 
 const express = require('express');
 const router = express.Router();
