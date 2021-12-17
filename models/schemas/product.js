@@ -35,20 +35,20 @@ const productSchema = new Schema({
     required:true
   },
   reviews:{ // 리뷰정보
-    size:{
+    fit:{
       'small':{type:Number,default:0,min:0},
-      'just':{type:Number,default:0,min:0},
+      'normal':{type:Number,default:0,min:0},
       'big':{type:Number,default:0,min:0}
     }, //착화감
-    comfort:{
-      0:{type:Number,default:0,min:0},
-      1:{type:Number,default:0,min:0},
-      2:{type:Number,default:0,min:0}
+    feeling:{
+      'good':{type:Number,default:0,min:0},
+      'moderate':{type:Number,default:0,min:0},
+      'bad':{type:Number,default:0,min:0}
     }, 
     color: {
-      0:{type:Number,default:0,min:0},
-      1:{type:Number,default:0,min:0},
-      2:{type:Number,default:0,min:0}
+      'clear':{type:Number,default:0,min:0},
+      'normal':{type:Number,default:0,min:0},
+      'blur':{type:Number,default:0,min:0}
     }
    }
 });

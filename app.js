@@ -6,17 +6,22 @@ require('dotenv').config();
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const cors = require('cors');
+const expressFileUpload = require("express-fileupload");
 const passport = require('passport');
 const passportSettingRouter = require('./passport/index');
 const getUserFromJWT = require('./middlewares/get-user-from-jwt');
 // mongoose 
 const mongoose = require('mongoose');
 
+//middleware
+const loginRequired = require('./middlewares/login-required');
 //router
 const indexRouter = require('./routes/index');
 const authRouter = require('./routes/auth');
 const testRouter= require('./routes/test');
-const loginRequired = require('./middlewares/login-required');
+const uploadImageRouter = require('./routes/uploadImage');
+
+//express-app
 const app = express();
 
 // DB connection
@@ -26,9 +31,10 @@ mongoose.connection.on('connect', ()=>{
 });
 
 app.use(cors());
+app.use(expressFileUpload());
 app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true })); // 바디파서
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -39,7 +45,7 @@ app.use(getUserFromJWT);
 app.use('/', indexRouter);
 app.use('/test',testRouter);
 app.use('/auth',authRouter);
-
+app.use('/upload-image',uploadImageRouter)
 // app.use('/users', usersRouter);
 // app.use('/posts',postsRouter);
 
