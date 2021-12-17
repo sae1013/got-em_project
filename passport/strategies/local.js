@@ -22,6 +22,7 @@ const local = new LocalStrategy(config, async (email, password, done) => {
       shortId: user.shortId,
       email: user.email,
       name: user.name,
+      nickName:user.nickName,
       phoneNumber:user.phoneNumber,
       isAdmin:user.isAdmin,
     });

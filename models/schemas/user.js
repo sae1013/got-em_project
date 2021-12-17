@@ -13,13 +13,19 @@ const UserSchema = new Schema(
       type: String,
       required: true,
     },
+    nickName: {
+      type: String,
+      required: true,
+    },
+
     password: {
       type: String,
       required: true,
     },
-    phoneNumber:{
-      type:String,
-      required:true,
+
+    phoneNumber: {
+      type: String,
+      required: true,
     },
     isAdmin: {
       type: Boolean,
@@ -27,8 +33,7 @@ const UserSchema = new Schema(
     },
     likes: [
       {
-        type: Schema.Types.ObjectId,
-        ref: 'Proudct',
+        type: String,
       },
     ],
   },

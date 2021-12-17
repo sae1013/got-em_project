@@ -64,7 +64,7 @@ router.post('/reset-password', asyncHandler(async (req, res) => {
 
 //계정찾기 라우터
 router.post('/find-email', asyncHandler(async(req,res)=>{
-  const {phoneNumber} = req.body;
+  const {phoneNumber,email} = req.body;
   const existingUser = await User.findOne({phoneNumber});
   
   if(!existingUser){
@@ -73,14 +73,13 @@ router.post('/find-email', asyncHandler(async(req,res)=>{
     throw error
   } 
   try{
-    const email = existingUser.email;
-    await sendMail(email, "TEAM7: 요청하신 아이디 입니다.",`요청하신 아이디 입니다: ${email}`);
+    await sendMail(email, "TEAM7: 요청하신 아이디 입니다.",`요청하신 아이디 입니다: ${existingUser.email}`);
     res.json({'success':"메일이 발송되었습니다."});
   }catch(err){
     const error = new Error('Server too busy')
     error.status = 421
     throw error
   }
-}))
+}));
 
 module.exports = router;

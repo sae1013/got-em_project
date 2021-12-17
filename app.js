@@ -15,11 +15,14 @@ const mongoose = require('mongoose');
 
 //middleware
 const loginRequired = require('./middlewares/login-required');
+const adminRequired = require('./middlewares/admin-required');
 //router
 const indexRouter = require('./routes/index');
 const authRouter = require('./routes/auth');
 const postRouter = require('./routes/posts');
-const testRouter= require('./routes/test');
+const productRouter = require('./routes/products');
+const testRouter = require('./routes/test');
+const userRouter = require('./routes/users'); 
 // const uploadImageRouter = require('./routes/uploadImage');
 
 //express-app
@@ -46,8 +49,10 @@ app.use(getUserFromJWT);
 app.use('/', indexRouter);
 app.use('/test',testRouter);
 app.use('/auth',authRouter);
+app.use('/users',userRouter);
+app.use('/products',productRouter);
 // app.use('/upload-image',uploadImageRouter);
-app.use('/posts',postRouter);
+
 // app.use('/users', usersRouter);
 // app.use('/posts',postsRouter);
 

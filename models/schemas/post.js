@@ -5,7 +5,7 @@ const shortId = require('./types/shortId');
 const PostSchema = new Schema(
   {
     shortId,
-    productId:{ // 어떤제품에대한 후기인지
+    productId:{ 
       type:Schema.Types.ObjectId,
       ref:'Product',
       required:true,
