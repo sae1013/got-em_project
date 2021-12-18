@@ -8,43 +8,43 @@ const productSchema = new Schema({
     ref: 'User',
     required:true
   },
-  modelName: { // 제품이름
+  modelName: { 
     type:String,
     required:true
   },
-  modelNumber: { //제품넘버
+  modelNumber: { 
     type:String,
     required:true
   },
-  series: { // 조던,에어포스,덩크
+  series: { 
     type: String,
     default:'jordan',
   },
-  color: { //발매색상
+  color: { 
     type:String
   },
-  price: { //발매가격
+  price: { 
     type:Number,
     required:true
   },
-  releaseDate:{ // 발매날짜
+  releaseDate:{ 
     type:Date,
   },
-  likeCount: { //좋아요갯수
+  likeCount: { 
     type:Number,
     default: 0,
     min:0
   },
-  imageUrl: { //상품이미지
+  imageUrl: { 
     type:String,
     required:true
   },
-  reviews:{ // 리뷰정보
+  reviews:{ 
     fit:{
       'small':{type:Number,default:0,min:0},
       'normal':{type:Number,default:0,min:0},
       'big':{type:Number,default:0,min:0}
-    }, //착화감
+    }, 
     feeling:{
       'good':{type:Number,default:0,min:0},
       'moderate':{type:Number,default:0,min:0},

@@ -40,7 +40,7 @@ router.get('/logout',(req,res)=>{
   res.status(200).send({message:'로그아웃 되었습니다'});
 });
 
-//비밀번호 찾기 라우터
+//비밀번호 찾기
 router.post('/reset-password', asyncHandler(async (req, res) => {
   const { email } = req.body; 
   const existedUser = await User.findOne({email});

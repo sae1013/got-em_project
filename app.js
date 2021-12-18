@@ -2,6 +2,7 @@ const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
 require('dotenv').config();
+
 //Third Party middlewares
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
@@ -15,6 +16,7 @@ const mongoose = require('mongoose');
 //middleware
 const loginRequired = require('./middlewares/login-required');
 const adminRequired = require('./middlewares/admin-required');
+
 //router
 const routerPackage = require('./routes/routes-package');
 const {authRouter,indexRouter,postRouter,productRouter,userRouter,imageRouter} = routerPackage;

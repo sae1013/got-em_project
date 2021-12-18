@@ -27,7 +27,7 @@ const local = new LocalStrategy(config, async (email, password, done) => {
       isAdmin:user.isAdmin,
     });
   } catch (err) {
-    err.status = 401; //에러 발생시 처리 미들웨어에서 일괄로 상태코드 지정.
+    err.status = 401; 
     done(err, null);
   } 
 });
