@@ -6,7 +6,6 @@ require('dotenv').config();
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const cors = require('cors');
-const expressFileUpload = require("express-fileupload");
 const passport = require('passport');
 const passportSettingRouter = require('./passport/index');
 const getUserFromJWT = require('./middlewares/get-user-from-jwt');
@@ -23,7 +22,7 @@ const postRouter = require('./routes/posts');
 const productRouter = require('./routes/products');
 const testRouter = require('./routes/test');
 const userRouter = require('./routes/users'); 
-// const uploadImageRouter = require('./routes/uploadImage');
+const uploadImageRouter = require('./routes/uploadImage');
 
 //express-app
 const app = express();
@@ -35,7 +34,7 @@ mongoose.connection.on('connect', ()=>{
 });
 
 app.use(cors());
-app.use(expressFileUpload());
+// app.use(expressFileUpload());
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -51,10 +50,7 @@ app.use('/test',testRouter);
 app.use('/auth',authRouter);
 app.use('/users',userRouter);
 app.use('/products',productRouter);
-// app.use('/upload-image',uploadImageRouter);
-
-// app.use('/users', usersRouter);
-// app.use('/posts',postsRouter);
+app.use('/upload-image',uploadImageRouter);
 
 
 // catch 404 and forward to error handler
