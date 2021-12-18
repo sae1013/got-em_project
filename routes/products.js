@@ -1,11 +1,29 @@
 const express = require('express');
 const router = express.Router();
-const { User } = require('../models/index');
-const { Product } = require('../models/index');
+const { Product, User } = require('../models/index');
 const asyncHandler = require('../utils/async-handler');
 const loginRequired = require('../middlewares/login-required');
 
+//전체 프로덕트 조회 
 router.get('/',asyncHandler(async(req,res)=>{
+  //로그인시, 비로그인시 나눠서 
+  let products = await Product.find({}).sort({"likeCount":-1});
+  products = products.reduce((acc,product)=>{ // 좋아요 flag박아서 리턴
+    return [...acc,{...product.toObject(),isLike:false}]
+  },[]);
+  
+  if(!req.user){
+    res.status(200).json(products);
+    return
+  }
+  const {likes} = await User.findOne({shortId:req.user.shortId});
+  products.forEach((product)=>{
+    if(likes.indexOf(product.shortId) != -1){
+      product.isLike = true;
+    }
+  })
+  console.log(products);
+  res.status(200).json(products);
   
 }));
 
