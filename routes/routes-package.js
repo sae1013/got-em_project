@@ -1,2 +1,12 @@
 
-// 여기서 라우트 파일들 다 모아서 한번에 export하는게 좋을 것 같습니다.
+module.exports = {
+  authRouter:require('./auth'),
+  indexRouter:require('./index'),
+  postRouter:require('./posts'),
+  productRouter:require('./products'),
+  userRouter:require('./users'),
+  imageRouter:require('./images')
+};
+
+ 
+

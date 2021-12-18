@@ -16,14 +16,8 @@ const mongoose = require('mongoose');
 const loginRequired = require('./middlewares/login-required');
 const adminRequired = require('./middlewares/admin-required');
 //router
-const indexRouter = require('./routes/index');
-const authRouter = require('./routes/auth');
-const postRouter = require('./routes/posts');
-const productRouter = require('./routes/products');
-const testRouter = require('./routes/test');
-const userRouter = require('./routes/users'); 
-const uploadImageRouter = require('./routes/uploadImage');
-
+const routerPackage = require('./routes/routes-package');
+const {authRouter,indexRouter,postRouter,productRouter,userRouter,imageRouter} = routerPackage;
 
 //express-app
 const app = express();
@@ -35,7 +29,6 @@ mongoose.connection.on('connect', ()=>{
 });
 
 app.use(cors());
-// app.use(expressFileUpload());
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -47,12 +40,11 @@ app.use(passport.initialize());
 app.use(getUserFromJWT);
 
 app.use('/', indexRouter);
-app.use('/test',testRouter);
 app.use('/auth',authRouter);
 app.use('/users',userRouter);
 app.use('/products',productRouter);
 app.use('/posts',postRouter);
-app.use('/upload-image',uploadImageRouter);
+app.use('/images',imageRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
