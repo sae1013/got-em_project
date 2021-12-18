@@ -67,7 +67,7 @@ router.get('/:productId/like',loginRequired,asyncHandler(async(req,res)=>{
 //어드민 상품등록, 수정
 router.post('/enroll',adminRequired,asyncHandler(async(req,res)=>{
   const {edit,productId} = req.query;
-  const {modelName,modelNumber,series,color,price,releaseDate,productImageUrl} = req.body;
+  const {modelName,modelNumber,series,color,price,releaseDate,imageUrl} = req.body;
   const adminUser = await User.findOne({shortId:req.user.shortId});
   
   if(edit && productId){ // 상품 업데이트, edit=true 와, 상품ID가 있어야함, 등록된 상품을 업데이트하고 
@@ -77,13 +77,13 @@ router.post('/enroll',adminRequired,asyncHandler(async(req,res)=>{
       error.status = 401;
       throw error 
     }
-    const updatedProduct = await Product.findOneAndUpdate({shortId:productId},{modelName,modelNumber,series,color,price,releaseDate,productImageUrl});  
+    const updatedProduct = await Product.findOneAndUpdate({shortId:productId},{modelName,modelNumber,series,color,price,releaseDate,imageUrl},{new: true}).populate('author');
     res.status(200).json(updatedProduct);
     return
   }
   //상품 등록
-  const enrolledProduct = await Product.create({modelName,modelNumber,series,color,price,releaseDate,productImageUrl,author:adminUser});
-  res.status(200).json(enrolledProduct); // 글쓴이까지 포함해서 populate 한상태로 내려주어야함,
+  const enrolledProduct = await Product.create({modelName,modelNumber,series,color,price,releaseDate,imageUrl,author:adminUser});
+  res.status(200).json(enrolledProduct); // 글쓴이까지 포함해서 populate 한상태로 내려주어야함,-> 아 객체생성을 할때 직접 넣어줘서 create하면, populate돼서 내려가네?
 
 }));
 
