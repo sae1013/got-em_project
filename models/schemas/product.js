@@ -3,6 +3,11 @@ const shortId = require('./types/shortId');
 
 const productSchema = new Schema({
   shortId,
+  author:{
+    type:Schema.Types.ObjectId,
+    ref: 'User',
+    required:true
+  },
   modelName: { // 제품이름
     type:String,
     required:true

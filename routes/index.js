@@ -8,7 +8,7 @@ const generatePassword = require('../utils/generate-password');
 const { User } = require('../models/index');
 
 router.post('/signup',asyncHandler(async (req, res) => {
-    const { email, name, isAdmin, password,phoneNumber } = req.body;
+    const { email, name, isAdmin, password,phoneNumber,nickName } = req.body;
 
     // 이미 회원가입되어있을때
     const existedUser = await User.findOne({$or:[
@@ -27,7 +27,8 @@ router.post('/signup',asyncHandler(async (req, res) => {
       name,
       isAdmin,
       password: hashedPassword,
-      phoneNumber
+      phoneNumber,
+      nickName
     });
 
     res.status(200).send({ message: '회원가입이 완료되었습니다' });

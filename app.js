@@ -24,6 +24,7 @@ const testRouter = require('./routes/test');
 const userRouter = require('./routes/users'); 
 const uploadImageRouter = require('./routes/uploadImage');
 
+
 //express-app
 const app = express();
 
@@ -50,8 +51,8 @@ app.use('/test',testRouter);
 app.use('/auth',authRouter);
 app.use('/users',userRouter);
 app.use('/products',productRouter);
+app.use('/posts',postRouter);
 app.use('/upload-image',uploadImageRouter);
-
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

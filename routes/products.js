@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { Product, User } = require('../models/index');
 const asyncHandler = require('../utils/async-handler');
+const adminRequired = require('../middlewares/admin-required');
 const loginRequired = require('../middlewares/login-required');
 
 //전체 프로덕트 조회 
@@ -11,7 +12,7 @@ router.get('/',asyncHandler(async(req,res)=>{
   products = products.reduce((acc,product)=>{ // 좋아요 flag박아서 리턴
     return [...acc,{...product.toObject(),isLike:false}]
   },[]);
-  
+
   if(!req.user){
     res.status(200).json(products);
     return
@@ -63,6 +64,27 @@ router.get('/:productId/like',loginRequired,asyncHandler(async(req,res)=>{
   }
 }));
 
+//어드민 상품등록, 수정
+router.post('/enroll',adminRequired,asyncHandler(async(req,res)=>{
+  const {edit,productId} = req.query;
+  const {modelName,modelNumber,series,color,price,releaseDate,productImageUrl} = req.body;
+  const adminUser = await User.findOne({shortId:req.user.shortId});
+  
+  if(edit && productId){ // 상품 업데이트, edit=true 와, 상품ID가 있어야함, 등록된 상품을 업데이트하고 
+    const existingProduct = await Product.findOne({shortId: productId}).populate('author');
+    if(existingProduct.author.shortId != adminUser.shortId){ // 글작성자와 다른유저가 수정한경우
+      const error = new Error('작성자와 달라 권한이 없습니다');
+      error.status = 401;
+      throw error 
+    }
+    const updatedProduct = await Product.findOneAndUpdate({shortId:productId},{modelName,modelNumber,series,color,price,releaseDate,productImageUrl});  
+    res.status(200).json(updatedProduct);
+    return
+  }
+  //상품 등록
+  const enrolledProduct = await Product.create({modelName,modelNumber,series,color,price,releaseDate,productImageUrl,author:adminUser});
+  res.status(200).json(enrolledProduct); // 글쓴이까지 포함해서 populate 한상태로 내려주어야함,
 
+}));
 
 module.exports = router;
