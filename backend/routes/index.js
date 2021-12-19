@@ -7,6 +7,7 @@ const generatePassword = require('../utils/generate-password');
 
 const { User } = require('../models/index');
 
+//회원가입
 router.post('/signup',asyncHandler(async (req, res) => {
     const { email, name, isAdmin, password,phoneNumber,nickName } = req.body;
 
@@ -63,7 +64,7 @@ router.post('/reset-password', asyncHandler(async (req, res) => {
   
 }));
 
-//계정찾기 라우터
+//계정찾기
 router.post('/find-email', asyncHandler(async(req,res)=>{
   const {phoneNumber,email} = req.body;
   const existingUser = await User.findOne({phoneNumber});

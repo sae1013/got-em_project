@@ -52,30 +52,31 @@ router.get('/:productId/like',loginRequired,asyncHandler(async(req,res)=>{
   const {likes} = await User.findOne({shortId:req.user.shortId});
   const index = likes.indexOf(productId);
   if(index != -1){ // 이미 좋아하고 있는 프로덕트라면,좋아요취소 cnt감소, user에 빼내줌
-    const product = await Product.findOneAndUpdate({shortId:productId},{$inc:{likeCount:-1}}); 
+    const product = await Product.findOneAndUpdate({shortId:productId},{$inc:{likeCount:-1}},{new:true}); 
     await User.findOneAndUpdate({shortId:req.user.shortId},{$pull: {likes : productId}});
-    res.status(200).json({...product.toObject(),isLike:false,likeCount:product.likeCount-1});
+    res.status(200).json({...product.toObject(),isLike:false});
   
   }else { // 좋아요 처리 cnt증가 , like배열에 추가해줌
-    const product = await Product.findOneAndUpdate({shortId:productId},{$inc:{likeCount:1}}); 
+    const product = await Product.findOneAndUpdate({shortId:productId},{$inc:{likeCount:1}},{new:true} ); 
     await User.findOneAndUpdate({shortId:req.user.shortId},{$push: {likes : productId}});
-    res.status(200).json({...product.toObject(),isLike:true,likeCount:product.likeCount+1});
+    res.status(200).json({...product.toObject(),isLike:true});
   }
 }));
 
-//어드민 상품등록, 수정
+
+//어드민 상품등록, 
 router.post('/enroll',adminRequired,asyncHandler(async(req,res)=>{
-  const {edit,productId} = req.query;
+  const productId = Object.keys(req.query)[0];
   const {modelName,modelNumber,series,color,price,releaseDate,imageUrl} = req.body;
   const adminUser = await User.findOne({shortId:req.user.shortId});
   
-  if(edit && productId){ 
+  if(productId){ 
     const existingProduct = await Product.findOne({shortId: productId}).populate('author');
     if(existingProduct.author.shortId != adminUser.shortId){ // 글작성자와 다른유저가 수정한경우
       const error = new Error('작성자와 달라 권한이 없습니다');
       error.status = 401;
       throw error 
-    }
+    } 
     const updatedProduct = await Product.findOneAndUpdate({shortId:productId},{modelName,modelNumber,series,color,price,releaseDate,imageUrl},{new: true}).populate('author');
     res.status(200).json(updatedProduct);
     return
@@ -84,6 +85,14 @@ router.post('/enroll',adminRequired,asyncHandler(async(req,res)=>{
   const enrolledProduct = await Product.create({modelName,modelNumber,series,color,price,releaseDate,imageUrl,author:adminUser});
   res.status(200).json(enrolledProduct); 
 
+}));
+
+//해당 어드민이 등록한 상품 모아보기. 
+router.get('/admin/:adminId',adminRequired, asyncHandler(async(req,res)=>{
+  const {adminId} = req.params;
+  const adminUser = await User.findOne({shortId:adminId});
+  const products = await Product.find({author:adminUser});
+  res.status(200).json(products);
 }));
 
 module.exports = router;

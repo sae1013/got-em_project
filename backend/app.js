@@ -25,7 +25,7 @@ const {authRouter,indexRouter,postRouter,productRouter,userRouter,imageRouter} =
 const app = express();
 
 // DB connection
-mongoose.connect('mongodb://localhost:27017/elice')
+mongoose.connect(process.env.MONGODB_URI)
 mongoose.connection.on('connect', ()=>{
   console.log('mongoDB connected');
 });

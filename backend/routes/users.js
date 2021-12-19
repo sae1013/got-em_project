@@ -19,4 +19,14 @@ router.get('/:userId/like',loginRequired, asyncHandler(async (req,res)=>{
 
 }));
 
+//프로필 정보변경
+router.put('/:userId/modify',loginRequired, asyncHandler(async(req,res)=>{
+  const {userId} = req.params;
+  const {profileUrl,nickName} = req.body;
+  
+  const updatedUser = await User.findOneAndUpdate({shortId:userId},{profileUrl,nickName},{new:true});
+  return res.status(200).json(updatedUser);
+  
+}));
+
 module.exports = router;
