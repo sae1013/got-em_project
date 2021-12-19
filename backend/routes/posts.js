@@ -62,11 +62,11 @@ router.patch("/write/:postId", loginRequired, async (req, res) => {
 });
 
 // 포스팅 삭제 -> 완료
-router.delete("/:postId/delete", loginRequired, async (req, res) => {
+router.delete("/:postId", loginRequired, async (req, res) => {
   const { postId } = req.params;
   await Post.deleteOne({ shortId: postId });
 
-  res.status(200).json({ message: "글 삭제 완료" });
+  res.status(200).json({ message: "게시글 삭제 완료" });
 });
 
 //댓글조회 -> 미완료
