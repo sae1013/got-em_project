@@ -5,7 +5,7 @@ const shortId = require('./types/shortId');
 const PostSchema = new Schema(
   {
     shortId,
-    productId:{ 
+    product:{ 
       type:Schema.Types.ObjectId,
       ref:'Product',
       required:true,
