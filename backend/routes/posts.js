@@ -44,4 +44,24 @@ router.post("/write/:productId", loginRequired, async (req, res) => {
   res.status(200).json(post);
 });
 
+//포스팅 수정
+router.patch("/write/:postId", loginRequired, async (req, res) => {
+  const { postId } = req.params;
+  const { title, content } = req.body;
+
+  const updatedPost = await Post.findOneAndUpdate(
+    { shortId: postId },
+    { title, content },
+    { new: true }
+  ).populate(['product','author']);
+  res.status(200).json(updatedPost);
+});
+// 포스팅 삭제 -> 완료
+router.delete("/:postId/delete", loginRequired, async (req, res) => {
+  const { postId } = req.params;
+  await Post.deleteOne({ shortId: postId });
+
+  res.status(200).json({ message: "글 삭제 완료" });
+});
+
 module.exports = router;
