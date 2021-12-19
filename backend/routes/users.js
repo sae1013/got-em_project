@@ -20,7 +20,7 @@ router.get('/:userId/like',loginRequired, asyncHandler(async (req,res)=>{
 }));
 
 //프로필 정보변경
-router.put('/:userId/modify',loginRequired, asyncHandler(async(req,res)=>{
+router.patch('/:userId/modify',loginRequired, asyncHandler(async(req,res)=>{
   const {userId} = req.params;
   const {profileUrl,nickName} = req.body;
   
