@@ -26,4 +26,22 @@ router.get("/:postId", async (req, res) => {
   res.status(200).json(post);
 });
 
+// 포스팅 작성 -> 완료
+router.post("/write/:productId", loginRequired, async (req, res) => {
+  const { productId } = req.params; // productId는 ObjectId로 ref
+
+  const { title, content } = req.body;
+  const author = await User.findOne({
+    shortId: req.user.shortId,
+  });
+  const product = await Product.findOne({ shortId: productId });
+  const post = await Post.create({
+    product,
+    title,
+    content,
+    author,
+  });
+  res.status(200).json(post);
+});
+
 module.exports = router;
