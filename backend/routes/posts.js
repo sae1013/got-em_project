@@ -37,7 +37,7 @@ router.get("/product/:productId", async (req, res) => {
 // 포스팅 조회 -> 완료 
 router.get("/:postId", async (req, res) => {
   const { postId } = req.params;
-  const post = await Post.findOneAndUpdate(
+  let post = await Post.findOneAndUpdate(
     { shortId: postId },
     { $inc: { viewCount: 1 } },
     { new: true }
@@ -45,6 +45,11 @@ router.get("/:postId", async (req, res) => {
   if (!post) {
     res.status(400).json({ message: "해당하는 글이 없습니다." });
     return;
+  }
+  if(post.author.isAdmin){
+    post = {...post.toObject(),notice:true}
+  }else{
+    post = {...post.toObject(),notice:false}
   }
   res.status(200).json(post);
 }); 
