@@ -34,7 +34,7 @@ router.get("/product/:productId", async (req, res) => {
 
 });
 
-// 포스팅 조회 -> 완료 
+// 포스팅 조회 
 router.get("/:postId", async (req, res) => {
   const { postId } = req.params;
   let post = await Post.findOneAndUpdate(
@@ -54,7 +54,7 @@ router.get("/:postId", async (req, res) => {
   res.status(200).json(post);
 }); 
 
-// 포스팅 작성 -> 완료
+// 포스팅 작성 
 router.post("/write/:productId", loginRequired, async (req, res) => {
   const { productId } = req.params; // productId는 ObjectId로 ref
 
@@ -72,7 +72,7 @@ router.post("/write/:productId", loginRequired, async (req, res) => {
   res.status(200).json(post);
 });
 
-//포스팅 수정 -> 완료
+//포스팅 수정 
 router.patch("/write/:postId", loginRequired, async (req, res) => {
   const { postId } = req.params;
   const { title, content } = req.body;
@@ -85,7 +85,7 @@ router.patch("/write/:postId", loginRequired, async (req, res) => {
   res.status(200).json(updatedPost);
 });
 
-// 포스팅 삭제 -> 완료
+// 포스팅 삭제 
 router.delete("/:postId", loginRequired, async (req, res) => {
   const { postId } = req.params;
   await Post.deleteOne({ shortId: postId });
@@ -93,7 +93,7 @@ router.delete("/:postId", loginRequired, async (req, res) => {
   res.status(200).json({ message: "게시글 삭제 완료" });
 });
 
-//댓글조회 -> 완료
+//댓글조회 
 router.get("/:postId/comments", async (req, res) => {
   const { postId } = req.params;
   const post = await Post.findOne({ shortId: postId },"comments").populate({path:'comments.author'});
@@ -105,7 +105,7 @@ router.get("/:postId/comments", async (req, res) => {
   
 });
 
-// 댓글 추가하기 -> 완료
+// 댓글 추가하기 
 router.post("/:postId/comments", loginRequired,async (req, res) => {
   const { postId } = req.params;
   const { content } = req.body;
