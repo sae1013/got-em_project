@@ -14,7 +14,7 @@ router.get("/product/:productId", async (req, res) => {
   const posts = await Post.find({ product });
   res.status(200).json(posts);
 });
-
+ 
 // 포스팅 조회 -> 완료 
 router.get("/:postId", async (req, res) => {
   const { postId } = req.params;
@@ -28,7 +28,7 @@ router.get("/:postId", async (req, res) => {
     return;
   }
   res.status(200).json(post);
-});
+}); 
 
 // 포스팅 작성 -> 완료
 router.post("/write/:productId", loginRequired, async (req, res) => {
@@ -72,17 +72,17 @@ router.delete("/:postId", loginRequired, async (req, res) => {
 //댓글조회 -> 완료
 router.get("/:postId/comments", async (req, res) => {
   const { postId } = req.params;
-  const post = await Post.findOne({ shortId: postId });
+  const post = await Post.findOne({ shortId: postId },"comments").populate({path:'comments.author'});
   if (!post) {
     res.status(400).json({ messaage: "게시글이 없습니다." });
     return;
   }
-  const comments = post.comments;
-  res.status(200).json(comments);
+  res.json(post.comments);
+  
 });
 
 // 댓글 추가하기 -> 완료
-router.post("/:postId/comments/write",loginRequired,async (req, res) => {
+router.post("/:postId/comments", loginRequired,async (req, res) => {
   const { postId } = req.params;
   const { content } = req.body;
   const author = await User.findOne({ shortId: req.user.shortId });
@@ -105,6 +105,7 @@ router.post("/:postId/comments/write",loginRequired,async (req, res) => {
   );
   res.status(200).json(comment);
 });
+
 
 router.delete('/:postId/comments/:commentId',async(req,res)=>{
   const {postId,commentId} = req.params;
