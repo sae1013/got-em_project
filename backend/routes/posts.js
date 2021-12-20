@@ -17,10 +17,19 @@ router.get("/product/:productId", async (req, res) => {
   }
   
   const total = await Post.countDocuments({ product });
-  const posts = await Post.find({product})
+  let posts = await Post.find({product}).populate(['author','product'])
   .sort({createdAt:-1})
   .skip(perPage * (page - 1)) 
   .limit(perPage);
+  
+  posts = posts.reduce((acc,post)=>{
+    if(post.author.isAdmin){
+      return [...acc,{...post.toObject(),notice:true}]
+    }else{
+      return [...acc,{...post.toObject(),notice:false}]
+    }
+  },[]);
+  
   res.status(200).json(posts);
 
 });

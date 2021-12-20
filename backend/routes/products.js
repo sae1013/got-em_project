@@ -9,7 +9,7 @@ const loginRequired = require('../middlewares/login-required');
 router.get('/',asyncHandler(async(req,res)=>{
   
   let products = await Product.find({}).sort({"likeCount":-1});
-  products = products.reduce((acc,product)=>{ // 좋아요 flag박아서 리턴
+  products = products.reduce((acc,product)=>{ 
     return [...acc,{...product.toObject(),isLike:false}]
   },[]);
 
