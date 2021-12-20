@@ -64,7 +64,6 @@ router.patch("/write/:postId", loginRequired, async (req, res) => {
 // 포스팅 삭제 -> 완료
 router.delete("/:postId", loginRequired, async (req, res) => {
   const { postId } = req.params;
-  console.log(req.params);
   await Post.deleteOne({ shortId: postId });
 
   res.status(200).json({ message: "게시글 삭제 완료" });
@@ -109,7 +108,7 @@ router.post("/:postId/comments/write",loginRequired,async (req, res) => {
 
 router.delete('/:postId/comments/:commentId',async(req,res)=>{
   const {postId,commentId} = req.params;
-  console.log(req.params)
+  
   await Post.findOneAndUpdate({shortId:postId},{$pull:{comments:{shortId:commentId} }}) // [comment,comment,comment]
   
   res.status(200).send({message:'댓글이 삭제 되었습니다'});
