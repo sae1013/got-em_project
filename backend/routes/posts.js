@@ -3,14 +3,12 @@ const router = express.Router();
 const { Post, User, Product,Comment } = require("../models");
 const loginRequired = require("../middlewares/login-required");
  
-// 해당제품 페이지별 포스팅 조회 posts, page, perPage, totalPage 
-
 // 민우 수정 -> 기존 페이지네이션은 그대로 살림
 router.get("/product/:productId", async (req, res) => {
   const { productId } = req.params; 
   const page = +req.query.page || 1;
   const perPage = +req.query.perPage || 10;
-  const {created,view,like} = req.query; // 생성순, 조회순 
+  const {created,view} = req.query; // 생성순, 조회순 
   let sortConfig = {} 
   view === 'asc' ? sortConfig['viewCount']=1 : view === 'desc' ? sortConfig['viewCount']= -1:null;
   created === 'asc' ? sortConfig['createdAt'] = 1 : created === 'desc'? sortConfig['createdAt'] = -1 : null;

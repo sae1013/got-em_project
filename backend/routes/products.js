@@ -18,7 +18,7 @@ router.get("/",asyncHandler(async (req, res) => {
     releaseDate === 'asc' ? sortConfig['releaseDate'] = 1 : releaseDate === 'desc'? sortConfig['releaseDate'] = -1 : null;
 
     let products = await Product.find({})
-      .sort({ likeCount: -1 })
+      .sort(sortConfig)
       .populate("author")
       .skip(perPage * (page - 1)) // 검색 결과 수 제한
       .limit(perPage); //검색 시 포함하지 않을 데이터의 수;
