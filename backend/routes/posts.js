@@ -61,12 +61,13 @@ router.get("/:postId", async (req, res) => {
 }); 
 
 // 포스팅 작성 
-router.post("/write/:productId", loginRequired, async (req, res) => {
+router.post("/write/:productId", async (req, res) => {
   const { productId } = req.params; // productId는 ObjectId로 ref
 
   const { title, content } = req.body;
   const author = await User.findOne({
-    shortId: req.user.shortId,
+    // shortId: req.user.shortId,
+    shortId:"1",
   });
   const product = await Product.findOne({ shortId: productId });
   const post = await Post.create({
@@ -79,7 +80,7 @@ router.post("/write/:productId", loginRequired, async (req, res) => {
 });
 
 //포스팅 수정 
-router.patch("/write/:postId", loginRequired, async (req, res) => {
+router.patch("/write/:postId", async (req, res) => {
   const { postId } = req.params;
   const { title, content } = req.body;
 
@@ -92,7 +93,7 @@ router.patch("/write/:postId", loginRequired, async (req, res) => {
 });
 
 // 포스팅 삭제 
-router.delete("/:postId", loginRequired, async (req, res) => {
+router.delete("/:postId", async (req, res) => {
   const { postId } = req.params;
   await Post.deleteOne({ shortId: postId });
 
@@ -112,39 +113,44 @@ router.get("/:postId/comments", async (req, res) => {
 });
 
 // 댓글 추가하기 
-router.post("/:postId/comments", loginRequired,async (req, res) => {
+router.post("/:postId/comments", async (req, res) => {
   const { postId } = req.params;
   const { content } = req.body;
-  const author = await User.findOne({ shortId: req.user.shortId });
+  //const author = await User.findOne({ shortId: req.user.shortId });
+  const author = await User.findOne({ shortId: "3" });
   const post = Post.findOne({ shortId: postId });
 
   if (!post) {
     res.status(400).json({ message: "게시글이 없습니다." });
     return;
   }
-  // populate 위해서 댓글 생성한후 삽입.
-  const comment = await Comment.create({author,content});
+  const comment = await Comment.create({
+    author,
+    content,
+  });
   // $push operator 사용하여 댓글 추가하기
+  await Post.findOneAndUpdate(
+    { shortId: postId },
+    { $push: { comments: comment }, $inc: { commentCount: 1 } }
+  );
+
+  res.status(200).json(comment);
+});
+
+
+router.delete("/:postId/comments/:commentId", async (req, res) => {
+  const { postId, commentId } = req.params;
+
   await Post.findOneAndUpdate(
     {
       shortId: postId,
     },
     {
-      $push: { comments: comment },
-    },
+      $pull: { comments: { shortId: commentId } },
+      $inc: { commentCount: -1 },
+    }
   );
-  res.status(200).json(comment);
+  res.status(200).send({ message: "댓글이 삭제 되었습니다." });
 });
-
-
-router.delete('/:postId/comments/:commentId',async(req,res)=>{
-  const {postId,commentId} = req.params;
-  
-  await Post.findOneAndUpdate({shortId:postId},{$pull:{comments:{shortId:commentId} }}) // [comment,comment,comment]
-  
-  res.status(200).send({message:'댓글이 삭제 되었습니다'});
-});
-
-
 
 module.exports = router;

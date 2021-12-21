@@ -6,7 +6,7 @@ const asyncHandler = require('../utils/async-handler');
 
 
 // 해당 유저가 좋아하고있는 상품들 모아보기
-router.get('/:userId/like',loginRequired, asyncHandler(async (req,res)=>{
+router.get('/:userId/like', asyncHandler(async (req,res)=>{
   const {userId} = req.params;
   const {likes} = await User.findOne({shortId:userId});
   const products = await Product.find({});
@@ -20,7 +20,7 @@ router.get('/:userId/like',loginRequired, asyncHandler(async (req,res)=>{
 }));
 
 //프로필 정보변경
-router.patch('/:userId/modify',loginRequired, asyncHandler(async(req,res)=>{
+router.patch('/:userId/modify', asyncHandler(async(req,res)=>{
   const {userId} = req.params;
   const {profileUrl,nickName} = req.body;
   
