@@ -88,7 +88,8 @@ router.post('/enroll',adminRequired,asyncHandler(async(req,res)=>{
 }));
 
 //해당 어드민이 등록한 상품 모아보기. 
-router.get('/admin/:adminId',adminRequired, asyncHandler(async(req,res)=>{
+router.get('/admin/:adminId', asyncHandler(async(req,res)=>{
+  console.log(req.user);
   const {adminId} = req.params;
   const adminUser = await User.findOne({shortId:adminId});
   const products = await Product.find({author:adminUser});

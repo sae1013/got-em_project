@@ -3,12 +3,16 @@ const router = express.Router();
 const { Post, User, Product,Comment } = require("../models");
 const loginRequired = require("../middlewares/login-required");
  
-// 해당제품 페이지별 포스팅 조회  
+// 해당제품 페이지별 포스팅 조회 posts, page, perPage, totalPage 
+
 router.get("/product/:productId", async (req, res) => {
   const { productId } = req.params; 
   const page = +req.query.page || 1;
   const perPage = +req.query.perPage || 10;
-
+  const {created,view} = req.query; // 생성순, 조회순
+  let sortConfig = {}
+  view == 'asc' ? sortConfig['viewCount']=1 : view == 'desc' ? sortConfig['viewCount']= -1:null;
+  created == 'asc' ? sortConfig['createdAt'] = 1 : created == 'desc'? sortConfig['createdAt'] = -1 : null;
   const product = await Product.findOne({ shortId: productId });
   // 해당 제품자체를 삭제한경우, 포스팅 조회도 불가해야함.
   if(!product){
@@ -17,8 +21,10 @@ router.get("/product/:productId", async (req, res) => {
   }
   
   const total = await Post.countDocuments({ product });
+  const totalPage = Math.ceil(total / perPage);
+
   let posts = await Post.find({product}).populate(['author','product'])
-  .sort({createdAt:-1})
+  .sort(sortConfig)
   .skip(perPage * (page - 1)) 
   .limit(perPage);
   
@@ -30,7 +36,7 @@ router.get("/product/:productId", async (req, res) => {
     }
   },[]);
   
-  res.status(200).json(posts);
+  res.status(200).json({page,totalData:total,totalPage,perPage,posts});
 
 });
 
