@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
 
-
-router.post('/',(req,res)=>{
-  const body = req.body;
-  console.log(body);
+router.get('/',(req,res)=>{
+  console.log(req.headers.cookie);
+  
+  res.send('ok')
 })
 module.exports = router;

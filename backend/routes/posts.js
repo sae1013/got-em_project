@@ -5,14 +5,16 @@ const loginRequired = require("../middlewares/login-required");
  
 // 해당제품 페이지별 포스팅 조회 posts, page, perPage, totalPage 
 
+// 민우 수정 -> 기존 페이지네이션은 그대로 살림
 router.get("/product/:productId", async (req, res) => {
   const { productId } = req.params; 
   const page = +req.query.page || 1;
   const perPage = +req.query.perPage || 10;
-  const {created,view} = req.query; // 생성순, 조회순
-  let sortConfig = {}
-  view == 'asc' ? sortConfig['viewCount']=1 : view == 'desc' ? sortConfig['viewCount']= -1:null;
-  created == 'asc' ? sortConfig['createdAt'] = 1 : created == 'desc'? sortConfig['createdAt'] = -1 : null;
+  const {created,view,like} = req.query; // 생성순, 조회순 
+  let sortConfig = {} 
+  view === 'asc' ? sortConfig['viewCount']=1 : view === 'desc' ? sortConfig['viewCount']= -1:null;
+  created === 'asc' ? sortConfig['createdAt'] = 1 : created === 'desc'? sortConfig['createdAt'] = -1 : null;
+  
   const product = await Product.findOne({ shortId: productId });
   // 해당 제품자체를 삭제한경우, 포스팅 조회도 불가해야함.
   if(!product){
@@ -61,13 +63,12 @@ router.get("/:postId", async (req, res) => {
 }); 
 
 // 포스팅 작성 
-router.post("/write/:productId", async (req, res) => {
+router.post("/write/:productId",loginRequired,async (req, res) => {
   const { productId } = req.params; // productId는 ObjectId로 ref
 
   const { title, content } = req.body;
   const author = await User.findOne({
-    // shortId: req.user.shortId,
-    shortId:"1",
+    shortId: req.user.shortId,
   });
   const product = await Product.findOne({ shortId: productId });
   const post = await Post.create({
@@ -80,7 +81,7 @@ router.post("/write/:productId", async (req, res) => {
 });
 
 //포스팅 수정 
-router.patch("/write/:postId", async (req, res) => {
+router.patch("/write/:postId",loginRequired, async (req, res) => {
   const { postId } = req.params;
   const { title, content } = req.body;
 
@@ -93,7 +94,7 @@ router.patch("/write/:postId", async (req, res) => {
 });
 
 // 포스팅 삭제 
-router.delete("/:postId", async (req, res) => {
+router.delete("/:postId",loginRequired, async (req, res) => {
   const { postId } = req.params;
   await Post.deleteOne({ shortId: postId });
 
@@ -113,11 +114,11 @@ router.get("/:postId/comments", async (req, res) => {
 });
 
 // 댓글 추가하기 
-router.post("/:postId/comments", async (req, res) => {
+router.post("/:postId/comments",loginRequired, async (req, res) => {
   const { postId } = req.params;
   const { content } = req.body;
-  //const author = await User.findOne({ shortId: req.user.shortId });
-  const author = await User.findOne({ shortId: "3" });
+  const author = await User.findOne({ shortId: req.user.shortId });
+  // const author = await User.findOne({ shortId: "3" });
   const post = Post.findOne({ shortId: postId });
 
   if (!post) {
@@ -138,7 +139,7 @@ router.post("/:postId/comments", async (req, res) => {
 });
 
 
-router.delete("/:postId/comments/:commentId", async (req, res) => {
+router.delete("/:postId/comments/:commentId",loginRequired, async (req, res) => {
   const { postId, commentId } = req.params;
 
   await Post.findOneAndUpdate(

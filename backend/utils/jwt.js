@@ -1,5 +1,4 @@
 const jwt = require('jsonwebtoken');
-const cookie = require('cookie');
 const secret = process.env.JWT_SECRET_KEY;
 
 exports.setUserToken = (res, user) => {
@@ -10,6 +9,7 @@ exports.setUserToken = (res, user) => {
   res.cookie('token', token, {
     maxAge: 1000*60*60*24*7,  //7일
     sameSite:'none',
+    httpOnly:true,
   });
 
 }
