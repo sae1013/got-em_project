@@ -52,15 +52,14 @@ router.get("/",asyncHandler(async (req, res) => {
 router.get("/:productId",asyncHandler(async (req, res) => {
     const { productId } = req.params;
     const product = await Product.findOne({ shortId: productId });
-    // console.log(product.reviews.fit.small);
-    // if (!req.user) {
-    //   // 유저 비로그인 시,
-    //   res.status(200).json({ ...product.toObject(), isLike: false });
-    //   return;
-    // }
-    //const { likes } = await User.findOne({ shortId: req.user.shortId }); //먼저 사용자의 likes
+    if (!req.user) {
+      // 유저 비로그인 시,
+      res.status(200).json({ ...product.toObject(), isLike: false });
+      return;
+    }
+    const { likes } = await User.findOne({ shortId: req.user.shortId }); //먼저 사용자의 likes
 
-    const { likes } = await User.findOne({ shortId: "1" }); //먼저 사용자의 likes 배열을 가져온다
+    // const { likes } = await User.findOne({ shortId: "1" }); //먼저 사용자의 likes 배열을 가져온다
     const index = likes.indexOf(productId);
     if (index != -1) {
       // 이미 좋아하고있는 상품이라면

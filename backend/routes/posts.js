@@ -3,13 +3,13 @@ const router = express.Router();
 const { Post, User, Product,Comment } = require("../models");
 const loginRequired = require("../middlewares/login-required");
  
-// 민우 수정 -> 기존 페이지네이션은 그대로 살림
+// 게시글 전체 조회 12.23일 수정됨
 router.get("/product/:productId", async (req, res) => {
   const { productId } = req.params; 
   const page = +req.query.page || 1;
   const perPage = +req.query.perPage || 10;
-  const {created,view} = req.query; // 생성순, 조회순 
-  let sortConfig = {} 
+  const {created, view} = req.query; // 생성순, 조회순 
+  let sortConfig = {notice:-1} 
   view === 'asc' ? sortConfig['viewCount']=1 : view === 'desc' ? sortConfig['viewCount']= -1:null;
   created === 'asc' ? sortConfig['createdAt'] = 1 : created === 'desc'? sortConfig['createdAt'] = -1 : null;
   
@@ -28,19 +28,11 @@ router.get("/product/:productId", async (req, res) => {
   .skip(perPage * (page - 1)) 
   .limit(perPage);
   
-  posts = posts.reduce((acc,post)=>{
-    if(post.author.isAdmin){
-      return [...acc,{...post.toObject(),notice:true}]
-    }else{
-      return [...acc,{...post.toObject(),notice:false}]
-    }
-  },[]);
-  
   res.status(200).json({page,totalData:total,totalPage,perPage,posts});
 
 });
 
-// 포스팅 조회 
+// 포스팅 조회 12.23일 수정됨
 router.get("/:postId", async (req, res) => {
   const { postId } = req.params;
   let post = await Post.findOneAndUpdate(
@@ -52,15 +44,11 @@ router.get("/:postId", async (req, res) => {
     res.status(400).json({ message: "해당하는 글이 없습니다." });
     return;
   }
-  if(post.author.isAdmin){
-    post = {...post.toObject(),notice:true}
-  }else{
-    post = {...post.toObject(),notice:false}
-  }
+  
   res.status(200).json(post);
 }); 
 
-// 포스팅 작성 
+// 포스팅 작성  // 12.23일 추가됨
 router.post("/write/:productId",loginRequired,async (req, res) => {
   const { productId } = req.params; // productId는 ObjectId로 ref
 
@@ -74,6 +62,7 @@ router.post("/write/:productId",loginRequired,async (req, res) => {
     title,
     content,
     author,
+    notice: author.isAdmin ? true: false
   });
   res.status(200).json(post);
 });

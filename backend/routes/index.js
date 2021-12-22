@@ -42,7 +42,7 @@ router.get('/delete-account',loginRequired, async(req,res)=>{
     shortId:req.user.shortId
   });
   res.status(200).json({message:'계정이 삭제되었습니다'});
-})
+});
 
 router.get('/logout',(req,res)=>{
   res.clearCookie('token');

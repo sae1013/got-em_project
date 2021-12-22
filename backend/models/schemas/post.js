@@ -21,6 +21,10 @@ const PostSchema = new Schema(
       type: String,
       required:true
     },
+    notice:{
+      type:String,
+      default:false
+    },
     content: {
       type: String,
       required:true
@@ -33,7 +37,24 @@ const PostSchema = new Schema(
     viewCount: {
       type:Number,
       default:0
-    }
+    },
+    reviews:{ 
+      fit:{
+        'small':{type:Number,default:0,min:0},
+        'normal':{type:Number,default:0,min:0},
+        'big':{type:Number,default:0,min:0}
+      }, 
+      feeling:{
+        'good':{type:Number,default:0,min:0},
+        'moderate':{type:Number,default:0,min:0},
+        'bad':{type:Number,default:0,min:0}
+      }, 
+      color: {
+        'clear':{type:Number,default:0,min:0},
+        'normal':{type:Number,default:0,min:0},
+        'blur':{type:Number,default:0,min:0}
+      }
+     }
   },
   {
     timestamps: true,

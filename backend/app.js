@@ -30,19 +30,6 @@ mongoose.connection.on('connect', ()=>{
   console.log('mongoDB connected');
 });
 
-// localhost Cors whitelist setup
-// const whitelist = ['http://127.0.0.1:5502'];
-// const corsOptions = {
-//   origin: (origin, callback) => {
-//     if (whitelist.indexOf(origin) !== -1) {
-//       callback(null, true)
-//     } else {
-//       callback(new Error('Not allowed by CORS'))
-//     }
-//   },
-//   credentials: true
-// }
-
 app.use(cors());
 app.use(logger('dev'));
 app.use(express.json());
@@ -61,6 +48,7 @@ app.use('/products',productRouter);
 app.use('/posts',postRouter);
 app.use('/images',imageRouter);
 app.use('/test',testRouter);
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
