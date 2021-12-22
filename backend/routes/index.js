@@ -4,7 +4,7 @@ const asyncHandler = require('../utils/async-handler');
 const hashPassword = require('../utils/hash-password');
 const sendMail = require('../utils/node-mailer');
 const generatePassword = require('../utils/generate-password');
-
+const loginRequired = require('../middlewares/login-required');
 const { User } = require('../models/index');
 
 //회원가입
@@ -35,6 +35,14 @@ router.post('/signup',asyncHandler(async (req, res) => {
     res.status(200).send({ message: '회원가입이 완료되었습니다' });
   }),
 );
+
+//회원탈퇴 -> 12.22 민우 
+router.get('/delete-account',loginRequired, async(req,res)=>{
+  await User.findOneAndDelete({
+    shortId:req.user.shortId
+  });
+  res.status(200).json({message:'계정이 삭제되었습니다'});
+})
 
 router.get('/logout',(req,res)=>{
   res.clearCookie('token');

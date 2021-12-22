@@ -33,8 +33,10 @@ router.get("/",asyncHandler(async (req, res) => {
       res.status(200).json(products);
       return;
     }
-    // const {likes} = await User.findOne({shortId:req.user.shortId});
-    const { likes } = await User.findOne({ shortId: "1" });
+    console.log(req.user.shortId)
+    const {likes} = await User.findOne({shortId:req.user.shortId});
+    
+    // const { likes } = await User.findOne({ shortId: "1" });
     products.forEach((product) => {
       if (likes.indexOf(product.shortId) != -1) {
         product.isLike = true;
