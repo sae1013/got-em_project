@@ -1,6 +1,9 @@
 const express = require('express');
 const { Product, User } = require('../models/index');
 const mergeState = require('../utils/merge-state');
+const loginRequired = require('../middlewares/login-required');
+const adminRequired = require('../middlewares/admin-required');
+const passport = require('passport');
 const router = express.Router();
 
 router.post('/:productId',async (req,res)=>{
@@ -21,10 +24,10 @@ router.post('/:productId',async (req,res)=>{
   res.send('ok');
 });
 
-router.get('/',(req,res)=>{
-  console.log('/로들어옴')
-  console.log(req.cookies);
-  res.json({message:'ok'})
+router.get('/',loginRequired,adminRequired,async (req,res)=>{
+  // console.log(req.headers['authorization'])
+  console.log(req.user)
+  res.json(req.user);
 })
 
 module.exports = router;

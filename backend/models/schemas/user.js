@@ -11,11 +11,11 @@ const UserSchema = new Schema(
     },
     name: {
       type: String,
-      required: true,
+      // required: true,
     },
     nickName: {
       type: String,
-      required: true,
+      // required: true,
     },
     profileUrl: {
       type:String,
@@ -27,7 +27,7 @@ const UserSchema = new Schema(
 
     phoneNumber: {
       type: String,
-      required: true,
+      // required: true,
     },
     isAdmin: {
       type: Boolean,

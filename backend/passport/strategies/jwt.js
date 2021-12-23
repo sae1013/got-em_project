@@ -1,16 +1,25 @@
-const JwtStrategy = require('passport-jwt').Strategy;
+const { ExtractJwt, Strategy: JwtStrategy } = require('passport-jwt');
+
 const secret = process.env.JWT_SECRET_KEY;
+const {User} = require('../../models/index');
 
-const cookieExtractor = (req) => {
-      const {token} = req.cookies;
-      return token
-  };
+const JWTConfig = {
+  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+  secretOrKey: process.env.JWT_AUTHORIZATION_KEY,
+};
 
-const opts = {
-  secretOrKey: secret,
-  jwtFromRequest: cookieExtractor,
+const JWTVerify = async (jwtPayload,done) => {
+  
+  try{
+    const user = await User.findOne({email:jwtPayload.email});
+    if(user){
+      done(null,user);
+      return;
+    }
+    done(null,false,{message:'잘못된 토큰입니다'});
+  }catch(err){
+    done(err);
+  }
 }
 
-module.exports = new JwtStrategy(opts, (user, done) => {
-  done(null, user);
-}); 
+module.exports = new JwtStrategy(JWTConfig, JWTVerify); 
