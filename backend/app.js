@@ -1,5 +1,6 @@
 const createError = require('http-errors');
 const express = require('express');
+const session = require('express-session');
 const path = require('path');
 require('dotenv').config();
 
@@ -30,12 +31,18 @@ mongoose.connection.on('connect', ()=>{
   console.log('mongoDB connected');
 });
 
+
 app.use(cors());
+app.use(cookieParser());
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser());
-// app.use(express.static(path.join(__dirname, 'public'))); ->삭제요청 불필요한 코드 12.22
+app.use(session({  
+  secret: 'keyboard cat',  // 암호화
+  resave: false,
+  saveUninitialized: true,
+}));
+
 
 passportSettingRouter();
 app.use(passport.initialize());

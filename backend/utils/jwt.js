@@ -7,8 +7,9 @@ exports.setUserToken = (res, user) => {
   // 유저 jwt 토큰생성
   const token = jwt.sign(user,secret);
   res.cookie('token', token, {
-    maxAge: 1000*60*60*24*7,  //7일
+    maxAge: 1000*60*60*24*7,  
     sameSite:'none',
+    secure:false,
     httpOnly:true,
   });
 

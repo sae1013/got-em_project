@@ -33,7 +33,7 @@ router.get("/",asyncHandler(async (req, res) => {
       res.status(200).json(products);
       return;
     }
-    console.log(req.user.shortId)
+    console.log(req.user.shortId);
     const {likes} = await User.findOne({shortId:req.user.shortId});
     
     // const { likes } = await User.findOne({ shortId: "1" });
@@ -70,7 +70,6 @@ router.get("/:productId",asyncHandler(async (req, res) => {
     
   })
 );
-
 
 //좋아요기능
 router.get("/:productId/like",asyncHandler(async (req, res) => {
@@ -149,9 +148,7 @@ router.patch("/enroll",adminRequired,asyncHandler(async (req, res) => {
       imageUrl,
     } = req.body;
 
-    const existingProduct = await Product.findOne({
-      shortId: productId,
-    }).populate("author");
+    const existingProduct = await Product.findOne({shortId: productId}).populate("author");
     
     const updatedProduct = await Product.findOneAndUpdate(
       { shortId: productId },
@@ -181,8 +178,8 @@ router.get("/admin/:adminId",adminRequired,asyncHandler(async (req, res) => {
     const products = await Product.find({ author: adminUser })
       .sort({ createdAt: -1 })
       .populate("author")
-      .skip(perPage * (page - 1)) // 검색 결과 수 제한
-      .limit(perPage); //검색 시 포함하지 않을 데이터의 수;;
+      .skip(perPage * (page - 1)) 
+      .limit(perPage); 
     const totalData = await Product.countDocuments({});
 
     const totalPage = Math.ceil(totalData / perPage);

@@ -22,7 +22,7 @@ const PostSchema = new Schema(
       required:true
     },
     notice:{
-      type:String,
+      type:Boolean,
       default:false
     },
     content: {

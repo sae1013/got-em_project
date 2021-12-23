@@ -2,10 +2,7 @@ const express = require("express");
 const imageRouter = express.Router();
 const upload = require("../modules/multer");
 
-imageRouter.post("/upload",(req,res,next)=>{
-  console.log(req.body);
-  next();
-},upload.array("image", 4),
+imageRouter.post("/upload",upload.array("image", 4),
   async (req, res) => {
     const uploadedImages = req.files;
     const imagePaths = uploadedImages.map((img) => img.location);

@@ -13,7 +13,9 @@ router.get('/:userId/like', asyncHandler(async (req,res)=>{
   let likeProducts = [];
   likes.forEach((productId)=>{
     const likeProduct = products.find((product)=> product.shortId == productId )
-    likeProducts.push(likeProduct);
+    if(likeProduct){
+      likeProducts.push(likeProduct);
+    }
   });
   res.status(200).json(likeProducts);
 

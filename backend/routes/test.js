@@ -1,6 +1,6 @@
 const express = require('express');
 const { Product, User } = require('../models/index');
-const mergeObject = require('../utils/object-merge');
+const mergeState = require('../utils/merge-state');
 const router = express.Router();
 
 router.post('/:productId',async (req,res)=>{
@@ -8,17 +8,23 @@ router.post('/:productId',async (req,res)=>{
   const {reviews} = req.body
   
   const product = await Product.findOne({shortId:productId});
-  const cur_reviews = product.reviews; // 사실 posts에서 가져온다음 로직돌린거를 product에 넣어줘야함.
-  const updatedReviewState = mergeObject(cur_reviews,reviews);
-  console.log(updatedReviewState);
-  const updated = await product.update({reviews:updatedReviewState})
-  console.log(updated);
+  let cur_reviews = product.reviews; // 사실 posts에서 가져온다음 로직돌린거를 product에 넣어줘야함.
+  cur_reviews = mergeState(cur_reviews,reviews,'merge');
+  console.log(cur_reviews);
   // const updatedProduct = await Product.findOneAndUpdate({shortId:productId},{reviews:updatedReviewState},{new:true});
+  await product.updateOne({reviews:cur_reviews}); // 동작
+  await product.deleteOne(); // 정상동작함 
+// 메인로직에서 populate만 통과하면됨
   // console.log(updatedProduct);
-  // console.log(cur_reviews)
-  // console.log(reviews);
-  // console.log(updatedProduct);
-  res.send('ok')
+  // res.send('ok')
   // res.json(updatedProduct)
+  res.send('ok');
+});
+
+router.get('/',(req,res)=>{
+  console.log('/로들어옴')
+  console.log(req.cookies);
+  res.json({message:'ok'})
 })
+
 module.exports = router;
