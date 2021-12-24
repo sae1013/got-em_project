@@ -35,7 +35,8 @@ router.post('/signup',asyncHandler(async (req, res) => {
 
     const token = jwt.sign(
       { email: email, name: name },
-      process.env.JWT_AUTHORIZATION_KEY
+      process.env.JWT_AUTHORIZATION_KEY,
+      {expiresIn: 60*120}
     );
     res.json({ user,token });
     
@@ -99,5 +100,6 @@ router.post('/find-email', asyncHandler(async(req,res)=>{
     throw error
   }
 }));
+
 
 module.exports = router;

@@ -20,7 +20,7 @@ router.post('/', async (req, res, next) => { // 로그인
           const token = jwt.sign(
               { email: user.email, name: user.name},
               process.env.JWT_AUTHORIZATION_KEY,
-              {expiresIn: 60*300} 
+              {expiresIn: 60*120} 
           );
          res.json({ user,token });
         });

@@ -32,6 +32,7 @@ router.patch('/:userId/modify', asyncHandler(async(req,res)=>{
   
 }));
 
+//비밀번호변경
 router.put('/:userId/change-password',loginRequired,asyncHandler(async (req,res)=>{
   const { userId:shortId } = req.params;
   const { password } = req.body;

@@ -18,7 +18,7 @@ router.get("/product/:productId", async (req, res) => {
   const product = await Product.findOne({ shortId: productId });
   // 해당 제품자체를 삭제한경우, 포스팅 조회도 불가해야함.
   if(!product){
-    res.send(400).json({message:'해당제품은 삭제되었습니다'});
+    res.status(400).json({message:'해당제품은 삭제되었습니다'});
     return
   }
   
