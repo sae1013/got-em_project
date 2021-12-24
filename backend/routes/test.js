@@ -25,9 +25,11 @@ router.post('/:productId',async (req,res)=>{
 });
 
 router.get('/',loginRequired,adminRequired,async (req,res)=>{
-  // console.log(req.headers['authorization'])
   console.log(req.user)
   res.json(req.user);
 })
 
+router.get('/second',loginRequired,async(req,res)=>{
+  console.log(req.user);
+})
 module.exports = router;

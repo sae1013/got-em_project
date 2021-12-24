@@ -120,12 +120,19 @@ router.delete("/:postId",loginRequired, async (req, res) => {
 //댓글조회 
 router.get("/:postId/comments", async (req, res) => {
   const { postId } = req.params;
+  const {created} = req.query;
   const post = await Post.findOne({ shortId: postId },"comments").populate({path:'comments.author'});
   if (!post) {
     res.status(400).json({ messaage: "게시글이 없습니다." });
     return;
   }
-  res.json(post.comments);
+  let comments = post.comments;
+  if(created === 'desc'){
+    comments.sort((a,b)=>{
+      return Number(b.createdAt) - Number(a.createdAt)
+    }) 
+  }
+  res.json(comments);
   
 });
 

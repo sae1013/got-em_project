@@ -3,6 +3,7 @@ const router = express.Router();
 const asyncHandler = require('../utils/async-handler');
 const hashPassword = require('../utils/hash-password');
 const sendMail = require('../utils/node-mailer');
+const jwt = require('jsonwebtoken');
 const generatePassword = require('../utils/generate-password');
 const loginRequired = require('../middlewares/login-required');
 const { User } = require('../models/index');
@@ -23,7 +24,7 @@ router.post('/signup',asyncHandler(async (req, res) => {
     }
     
     const hashedPassword = hashPassword(password);
-    await User.create({
+    const user = await User.create({
       email,
       name,
       isAdmin,
@@ -32,7 +33,12 @@ router.post('/signup',asyncHandler(async (req, res) => {
       nickName
     });
 
-    res.status(200).send({ message: '회원가입이 완료되었습니다' });
+    const token = jwt.sign(
+      { email: email, name: name },
+      process.env.JWT_AUTHORIZATION_KEY
+    );
+    res.json({ user,token });
+    
   }),
 );
 
@@ -41,13 +47,13 @@ router.get('/delete-account',loginRequired, async(req,res)=>{
   await User.findOneAndDelete({
     shortId:req.user.shortId
   });
-  res.clearCookie('token');
+  // res.clearCookie('token');
   res.status(200).json({message:'계정이 삭제되었습니다'});
 });
 
 //로그아웃
 router.get('/logout',loginRequired,(req,res)=>{
-  res.clearCookie('token');
+  // res.clearCookie('token');
   res.status(200).send({message:'로그아웃 되었습니다'});
 });
 

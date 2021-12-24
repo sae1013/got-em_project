@@ -30,3 +30,4 @@ const local = new LocalStrategy(config,async(email, password, done) => {
 
 module.exports = local;
 
+//회원 가입시 검증 로직

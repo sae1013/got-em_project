@@ -23,3 +23,5 @@ const JWTVerify = async (jwtPayload,done) => {
 }
 
 module.exports = new JwtStrategy(JWTConfig, JWTVerify); 
+
+//매 요청마다 유저검증로직

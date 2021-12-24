@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 
 const router = Router();
 
-router.post('/', async (req, res, next) => { 
+router.post('/', async (req, res, next) => { // 로그인
     try {          
       passport.authenticate('local', (passportError, user, info) => {
 
@@ -18,8 +18,9 @@ router.post('/', async (req, res, next) => {
             return;
           }
           const token = jwt.sign(
-              { email: user.email, name: user.name, auth: user.auth },
-              process.env.JWT_AUTHORIZATION_KEY
+              { email: user.email, name: user.name},
+              process.env.JWT_AUTHORIZATION_KEY,
+              {expiresIn: 60*300} 
           );
          res.json({ user,token });
         });

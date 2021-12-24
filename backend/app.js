@@ -27,14 +27,15 @@ mongoose.connection.on('connect', ()=>{
   console.log('mongoDB connected');
 });
 
-// const corsOptions = {
-//   origin:true,
-//   origin: "http://127.0.0.1:5502",
-//   "preflightContinue": false,
-//   credentials:true,
-// };
+const corsOptions = {
+  origin:true,
+  // origin: "http://127.0.0.1:5502",
+  "preflightContinue": false,
+  credentials:true,
+};
 
-app.use(cors());
+app.use(cors(corsOptions));
+// app.use(cors());
 app.use(cookieParser());
 app.use(logger('dev'));
 app.use(express.json());
