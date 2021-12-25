@@ -48,13 +48,11 @@ router.get('/delete-account',loginRequired, async(req,res)=>{
   await User.findOneAndDelete({
     shortId:req.user.shortId
   });
-  // res.clearCookie('token');
   res.status(200).json({message:'계정이 삭제되었습니다'});
 });
 
 //로그아웃
 router.get('/logout',loginRequired,(req,res)=>{
-  // res.clearCookie('token');
   res.status(200).send({message:'로그아웃 되었습니다'});
 });
 

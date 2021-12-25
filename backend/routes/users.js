@@ -22,6 +22,26 @@ router.get('/:userId/like', asyncHandler(async (req,res)=>{
 
 }));
 
+// 유저가 작성한 글 모아보기
+router.get( "/:userId/posts",loginRequired,asyncHandler(async (req, res) => {
+    const page = +req.query.page || 1;
+    const perPage = +req.query.perPage || 10;
+
+    const { userId } = req.params;
+    const user = await User.findOne({ shortId: userId });
+    const products = await Post.find({ author: user })
+      .sort({ createdAt: -1 })
+      .populate(["author", "product"])
+      .skip(perPage * (page - 1)) // 검색 결과 수 제한
+      .limit(perPage); //검색 시 포함하지 않을 데이터의 수;;
+    const totalData = await Product.countDocuments({});
+
+    const totalPage = Math.ceil(totalData / perPage);
+
+    res.status(200).json({ page, totalData, totalPage, perPage, products });
+  })
+);
+
 //프로필 정보변경
 router.patch('/:userId/modify', asyncHandler(async(req,res)=>{
   const {userId} = req.params;

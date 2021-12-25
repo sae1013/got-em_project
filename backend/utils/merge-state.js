@@ -11,3 +11,4 @@ const mergeState = (currentObj,targetObj,mode)=>{
 }
 
 module.exports = mergeState
+

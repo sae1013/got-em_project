@@ -50,10 +50,10 @@ router.get("/:postId", async (req, res) => {
   res.status(200).json(post);
 }); 
 
-// 포스팅 작성  // 12.23일 후기부분 개발.
+// 포스팅 작성  
 router.post("/write/:productId",loginRequired,async (req, res) => {
   const { productId } = req.params; // productId는 ObjectId로 ref
-
+// 작성시 rerviews 모양은 : 따로따로 들어온다.
   const { title, content,reviews } = req.body;
   const author = await User.findOne({
     shortId: req.user.shortId,
@@ -70,7 +70,7 @@ router.post("/write/:productId",loginRequired,async (req, res) => {
     content,
     author,
     notice: author.isAdmin ? true: false,
-    reviews // 포스팅할때 작성한 reviews는 그대로 반환해준다.
+    reviews 
   });
   res.status(200).json(post);
 });
@@ -79,19 +79,18 @@ router.post("/write/:productId",loginRequired,async (req, res) => {
 router.patch("/write/:postId",loginRequired, async (req, res) => {
   const { postId } = req.params;
   const { title, content,reviews } = req.body;
-
   // postId로 기존에 작성한 리뷰를 찾는다.
-  const post = await Post.findOne({shortId:postId}); // 이거 product는 populate되는지 테스트
+  const post = await Post.findOne({shortId:postId}).populate('product'); // 이거 product는 populate되는지 테스트 지정해줘야함
   const rollbackReviews = post.reviews;
   // 현재 타겟상품을 가져온다.
   const product = await Product.findOne({shortId:post.product.shortId});
 
   let cur_reviews = product.reviews;
-  cur_reviews = updateState(cur_reviews,rollbackReviews,'rollback'); //롤백진행
-  cur_reviews = updateState(cur_reviews,reviews,'merge'); // 병합진행
+  cur_reviews = mergeState(cur_reviews,rollbackReviews,'rollback'); //롤백진행
+  cur_reviews = mergeState(cur_reviews,reviews,'merge'); // 병합진행
   await product.updateOne({reviews:cur_reviews}); // 리뷰교체
-
-  const updatedPost = await Post.findOneAndUpdate(
+  
+  const updatedPost = await Post.findOneAndUpdate(  // 만약 객체형태를 항상 맞춰줘야하면, 
     { shortId: postId },
     { title, content,reviews },
     { new: true }
@@ -104,12 +103,13 @@ router.delete("/:postId",loginRequired, async (req, res) => {
   const { postId } = req.params;
   
   // 현재 게시글의 상품에 후기 부분 전부 롤백
-  const post = await Post.findOne({shortId:postId});
-  const product = await Product.findOne({shortId:post.product.shortId});
+  const post = await Post.findOne({shortId:postId}).populate('product'); // 당연히 post.revies 가능
+  const product = await Product.findOne({shortId:post.product.shortId}); // product.reviews 가능
+  // console.log(product);
   let cur_reviews = product.reviews;
   const rollbackReviews = post.reviews;
   //롤백진행
-  cur_reviews = updateState(cur_reviews,rollbackReviews,'rollback');
+  cur_reviews = mergeState(cur_reviews,rollbackReviews,'rollback');
   await product.updateOne({reviews:cur_reviews});
 
   //게시글삭제

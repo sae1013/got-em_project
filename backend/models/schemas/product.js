@@ -40,7 +40,6 @@ const productSchema = new Schema({
     required:true
   },
   reviewsCount: {
-    // 연산하기 쉽게 게시글 작성 할 때마다 카운트
     type: Number,
     default: 0,
   },
