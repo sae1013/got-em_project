@@ -32,8 +32,8 @@ router.get( "/:userId/posts",loginRequired,asyncHandler(async (req, res) => {
     const products = await Post.find({ author: user })
       .sort({ createdAt: -1 })
       .populate(["author", "product"])
-      .skip(perPage * (page - 1)) // 검색 결과 수 제한
-      .limit(perPage); //검색 시 포함하지 않을 데이터의 수;;
+      .skip(perPage * (page - 1)) 
+      .limit(perPage); 
     const totalData = await Product.countDocuments({});
 
     const totalPage = Math.ceil(totalData / perPage);

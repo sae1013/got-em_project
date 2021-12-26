@@ -3,11 +3,12 @@ const { User } = require('../../models');
 const hashPassword = require('../../utils/hash-password');
 
 const config = {
-  usernameField:'email', 
+  usernameField:'email',
   passwordField:'password'
 };
 
 const local = new LocalStrategy(config,async(email, password, done) => {
+  
   try {
     const user = await User.findOne({ email });
     if (!user) {
@@ -30,4 +31,4 @@ const local = new LocalStrategy(config,async(email, password, done) => {
 
 module.exports = local;
 
-//회원 가입시 검증 로직
+//로그인 검증 로직

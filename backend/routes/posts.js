@@ -62,7 +62,7 @@ router.post("/write/:productId",loginRequired,async (req, res) => {
   // product모델의 리뷰객체를 업데이트 해준다.
   let cur_reviews = product.reviews; // 수정시에는 posts에서 가져온다음 로직돌린거를 product에 넣어줘야함.
   cur_reviews = mergeState(cur_reviews,reviews,'merge');
-  await product.updateOne({reviews:cur_reviews}); // 상품을 여기서 업데이트 쳐준다
+  await product.updateOne({reviews:cur_reviews,$inc: { reviewsCount: 1 }}); // 상품을 여기서 업데이트 쳐준다
 
   const post = await Post.create({
     product,
@@ -110,7 +110,7 @@ router.delete("/:postId",loginRequired, async (req, res) => {
   const rollbackReviews = post.reviews;
   //롤백진행
   cur_reviews = mergeState(cur_reviews,rollbackReviews,'rollback');
-  await product.updateOne({reviews:cur_reviews});
+  await product.updateOne({reviews:cur_reviews,$inc: { reviewsCount: -1 }});
 
   //게시글삭제
   post.deleteOne();
@@ -141,7 +141,7 @@ router.post("/:postId/comments",loginRequired, async (req, res) => {
   const { postId } = req.params;
   const { content } = req.body;
   const author = await User.findOne({ shortId: req.user.shortId });
-  // const author = await User.findOne({ shortId: "3" });
+  
   const post = Post.findOne({ shortId: postId });
 
   if (!post) {

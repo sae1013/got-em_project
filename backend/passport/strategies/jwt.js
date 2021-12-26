@@ -10,10 +10,10 @@ const JWTConfig = {
 
 const JWTVerify = async (jwtPayload,done) => {
   
-  try{
+  try {
     const user = await User.findOne({email:jwtPayload.email});
     if(user){
-      done(null,user);
+      done(null,user); //req.user 
       return;
     }
     done(null,false,{message:'잘못된 토큰입니다'});
