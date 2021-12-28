@@ -6,43 +6,27 @@ const adminRequired = require('../middlewares/admin-required');
 const loginRequired = require('../middlewares/login-required');
 
 //전체 프로덕트 조회 
-router.get("/",loginRequired, 
-  asyncHandler(async (req, res) => {
+router.get("/",loginRequired,asyncHandler(async (req, res) => {
     const page = +req.query.page || 1;
     const perPage = +req.query.perPage || 10;
     const { created, like, price, releaseDate } = req.query; 
     console.log(req.user);
     let sortConfig = {}; 
-    like === "asc"
-      ? (sortConfig["likeCount"] = 1)
-      : like === "desc"
-      ? (sortConfig["likeCount"] = -1)
-      : null;
-    created === "asc"
-      ? (sortConfig["createdAt"] = 1)
-      : created === "desc"
-      ? (sortConfig["createdAt"] = -1)
-      : null;
-    price === "asc"
-      ? (sortConfig["price"] = 1)
-      : created === "desc"
-      ? (sortConfig["price"] = -1)
-      : null;
-    releaseDate === "asc"
-      ? (sortConfig["releaseDate"] = 1)
-      : releaseDate === "desc"
-      ? (sortConfig["releaseDate"] = -1)
-      : null;
+    like === "asc"? (sortConfig["likeCount"] = 1): like === "desc"? (sortConfig["likeCount"] = -1): null;
+    created === "asc"? (sortConfig["createdAt"] = 1): created === "desc"? (sortConfig["createdAt"] = -1): null;
+    price === "asc"? (sortConfig["price"] = 1): created === "desc"? (sortConfig["price"] = -1): null;
+    releaseDate === "asc"? (sortConfig["releaseDate"] = 1): releaseDate === "desc"? (sortConfig["releaseDate"] = -1): null;
 
     let products = await Product.find({})
       .sort(sortConfig)
       .populate("author")
       .skip(perPage * (page - 1)) 
       .limit(perPage); 
+
     products = products.reduce((acc, product) => {
-      // 좋아요 처리
       return [...acc, { ...product.toObject(), isLike: false }];
     }, []);
+    
     const totalData = await Product.countDocuments({});
 
     const totalPage = Math.ceil(totalData / perPage);
@@ -109,7 +93,6 @@ router.get("/:productId/like",loginRequired,asyncHandler(async (req, res) => {
         isLike: false,
       });
     } else {
-      // 좋아요 처리 cnt증가 , like배열에 추가해줌
       const product = await Product.findOneAndUpdate(
         { shortId: productId },
         { $inc: { likeCount: 1 } },
@@ -132,7 +115,6 @@ router.post("/enroll",loginRequired,adminRequired,asyncHandler(async (req, res) 
     const {modelName,modelNumber,series,color,price,releaseDate,imageUrl,} = req.body;
        const adminUser = await User.findOne({ shortId: req.user.shortId });
     
-
     //상품 등록
     const enrolledProduct = await Product.create({
       modelName,
@@ -186,12 +168,12 @@ router.get("/admin/:adminId",loginRequired,adminRequired,asyncHandler(async (req
 
     const { adminId } = req.params;
     const adminUser = await User.findOne({ shortId: adminId }); 
-    const products = await Product.find({ author: adminUser }) // 여기서 이미 해당 
+    const products = await Product.find({ author: adminUser }) 
       .sort({ createdAt: -1 })
       .populate("author")
       .skip(perPage * (page - 1)) 
       .limit(perPage); 
-    const totalData = await Product.countDocuments({author:adminUser}); // 여기에{author:adminUser} 를 찾아야함 
+    const totalData = await Product.countDocuments({author:adminUser}); 
 
     const totalPage = Math.ceil(totalData / perPage);
 

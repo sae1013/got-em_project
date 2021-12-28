@@ -11,13 +11,10 @@ const passportSettingRouter = require('./passport/index');
 // mongoose 
 const mongoose = require('mongoose');
 
-//middleware
-const adminRequired = require('./middlewares/admin-required');
-
 //router
 const routerPackage = require('./routes/routes-package');
 const {authRouter,indexRouter,postRouter,productRouter,userRouter,imageRouter} = routerPackage;
-const testRouter = require('./routes/test');
+
 //express-app
 const app = express();
 
@@ -30,13 +27,12 @@ mongoose.connection.on('connect', ()=>{
 
 const corsOptions = {
   origin:true,
-  // origin: "http://127.0.0.1:5502",
+  origin: "http://127.0.0.1:5502",
   "preflightContinue": false,
   credentials:true,
 };
 
 app.use(cors(corsOptions));
-// app.use(cors());
 app.use(cookieParser());
 app.use(logger('dev'));
 app.use(express.json());
@@ -51,7 +47,7 @@ app.use('/users',userRouter);
 app.use('/products',productRouter);
 app.use('/posts',postRouter);
 app.use('/images',imageRouter);
-app.use('/test',testRouter);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
