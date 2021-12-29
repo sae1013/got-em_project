@@ -1,7 +1,7 @@
 const express = require('express');
 const loginRequired = require('../middlewares/login-required');
 const router = express.Router();
-const { User,Product } = require('../models/index');
+const { User,Product,Post } = require('../models/index');
 const asyncHandler = require('../utils/async-handler');
 const hashPassword = require('../utils/hash-password');
 
@@ -24,6 +24,8 @@ router.get('/:userId/like', asyncHandler(async (req,res)=>{
 
 // 유저가 작성한 글 모아보기
 router.get( "/:userId/posts",loginRequired,asyncHandler(async (req, res) => {
+    
+    
     const page = +req.query.page || 1;
     const perPage = +req.query.perPage || 10;
 
@@ -33,11 +35,12 @@ router.get( "/:userId/posts",loginRequired,asyncHandler(async (req, res) => {
       .sort({ createdAt: -1 })
       .populate(["author", "product"])
       .skip(perPage * (page - 1)) 
-      .limit(perPage); 
+      .limit(perPage);
+    
     const totalData = await Product.countDocuments({});
 
     const totalPage = Math.ceil(totalData / perPage);
-
+    
     res.status(200).json({ page, totalData, totalPage, perPage, products });
   })
 );

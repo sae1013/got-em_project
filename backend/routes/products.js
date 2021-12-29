@@ -10,7 +10,7 @@ router.get("/",loginRequired,asyncHandler(async (req, res) => {
     const page = +req.query.page || 1;
     const perPage = +req.query.perPage || 10;
     const { created, like, price, releaseDate } = req.query; 
-    console.log(req.user);
+    
     let sortConfig = {}; 
     like === "asc"? (sortConfig["likeCount"] = 1): like === "desc"? (sortConfig["likeCount"] = -1): null;
     created === "asc"? (sortConfig["createdAt"] = 1): created === "desc"? (sortConfig["createdAt"] = -1): null;
@@ -40,6 +40,7 @@ router.get("/",loginRequired,asyncHandler(async (req, res) => {
         }
     });
     }
+    
     res.status(200).json({ page, totalData, totalPage, perPage, products });
   })
 );

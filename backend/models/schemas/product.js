@@ -36,7 +36,7 @@ const productSchema = new Schema({
     min:0
   },
   imageUrl: { 
-    type:String,
+    type:[String],
     required:true
   },
   reviewsCount: {

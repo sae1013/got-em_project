@@ -20,7 +20,7 @@ const app = express();
 
 
 // DB connection
-mongoose.connect(process.env.MONGODB_CLOUD_URI)
+mongoose.connect(process.env.MONGODB_URI)
 mongoose.connection.on('connect', ()=>{
   console.log('mongoDB connected');
 }); 
