@@ -11,7 +11,7 @@
     - Javascript, HTML, CSS <br><br>
     
     백엔드<br>
-    - Node.js, MongoDB
+    - Node.js, MongoDB, AWS-s3()
     <br><br>
     
     배포 <br>
