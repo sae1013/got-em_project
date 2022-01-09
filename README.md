@@ -11,7 +11,7 @@
     - Javascript, HTML, CSS <br><br>
     
     백엔드<br>
-    - Node.js, MongoDB, AWS-s3()
+    - Node.js, MongoDB, AWS-s3(이미지 저장소)
     <br><br>
     
     배포 <br>
