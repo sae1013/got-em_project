@@ -64,6 +64,9 @@
 
   - DB Schema <br> 
   https://whimsical.com/schemas-9vDLdbNkui2JnGx3LFQ4Bg
+  
+  - API Guide <br>
+  https://documenter.getpostman.com/view/18826480/UVXery1a#df6c703e-de2a-4713-868e-cf610ccbe76a
 
 ## 5. 프로젝트 팀원 역할 분담
 | 이름 | 담당 업무 |
