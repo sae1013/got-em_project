@@ -1,5 +1,6 @@
 # GOT'EM
 - 주로 한정판 신발들의 사이즈정보, 착화감 등의 리뷰를 공유하는 게시판입니다.
+- PPT 링크: https://www.miricanvas.com/v/1to0zs
 
 ## 1. 프로젝트 소개
 
